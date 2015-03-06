@@ -13,8 +13,8 @@ This module is designed to be use with `pressor/framework`.
 ```
 	...
     "require": {
-        "pressor/framework": "~0.0",
-        "pressor/muplugin": "~0.0"
+        "pressor/framework": "dev-master",
+        "pressor/mu-plugin": "dev-master"
     },
     "extra":{
         "installer-paths": {
