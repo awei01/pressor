@@ -1,2 +1,5 @@
+# Subsplit tree
+/.subsplit
+
 # Ignore starter as it will commit directly
 /starter
