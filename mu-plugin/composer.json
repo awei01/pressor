@@ -1,8 +1,13 @@
 {
     "name": "pressor/mu-plugin",
     "description": "Wordpress as a composer dependency in the context of a Laravel appliction. This module is a Wordpress muplugin that will boot the Pressor framework.",
+    "keywords": ["framework", "laravel", "wordpress", "pressor", "plugin", "wordpress-muplugin"],
     "license": "MIT",
-    "authors": [],
+    "authors": [
+        {
+            "name": "Austin Wei"
+        }
+    ],
     "type": "wordpress-muplugin",
     "extra": {
         "installer-name": "pressor"
