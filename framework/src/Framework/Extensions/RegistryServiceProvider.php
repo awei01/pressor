@@ -13,6 +13,7 @@ class RegistryServiceProvider extends ServiceProvider {
 		$this->publishes(array(
 			__DIR__ . '/providers.php' => config_path('pressor.registry.php'),
 		));
+		$this->app['pressor.registry']->bootstrap();
 	}
 
 	/**

@@ -17,9 +17,10 @@ class RegistryServiceProviderTest extends TestCase {
 
 		$this->assertFalse($provider->isDeferred());
 	}
-	function test_boot_NoParams_PublishesConfigFilesToConfigPath()
+	function test_boot_NoParamsAfterRegister_PublishesConfigFilesToConfigPath()
 	{
 		$provider = $this->makeProvider();
+		$provider->register();
 		$provider->boot();
 
 		$result = RegistryServiceProvider::pathsToPublish(__NAMESPACE__ . '\RegistryServiceProvider');
@@ -27,6 +28,16 @@ class RegistryServiceProviderTest extends TestCase {
 		$this->assertEquals(array(
 			$this->extractSrcPath('Framework/Extensions/providers.php') => config_path('pressor.registry.php'),
 		), $result);
+	}
+	function test_boot_NoParamsAfterRegister_CallsBootstrapOnPressorRegistryKeyWithNoArgs()
+	{
+		$provider = $this->makeProvider();
+		$provider->register();
+		$mockRegistry = $this->app['pressor.registry'] = $this->fakePressorRegistry();
+
+		$mockRegistry->shouldReceive('bootstrap')->once()->withNoArgs();
+
+		$provider->boot();
 	}
 
 	function test_register_NoParams_MergesPressorRegistryKeyWithKeysFile()
