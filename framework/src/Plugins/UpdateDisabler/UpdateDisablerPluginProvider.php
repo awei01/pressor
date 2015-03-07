@@ -1,6 +1,7 @@
 <?php namespace Pressor\Plugins\UpdateDisabler;
 use Pressor\Support\Plugins\PluginProvider as BaseProvider;
 use Illuminate\Container\Container;
+use Pressor\Contracts\Framework\Request\Context as RequestContext;
 
 class UpdateDisablerPluginProvider extends BaseProvider {
 
@@ -30,6 +31,16 @@ class UpdateDisablerPluginProvider extends BaseProvider {
 		$classname = $this->extractValidClassname();
 		$configs = $app['config']->get('pressor.plugins.update-disabler');
 		return new $classname($app['pressor'], $configs);
+	}
+
+	/**
+	 * should the plugin load given the request?
+	 * @param  Pressor\Contracts\Framework\Request\Context $request
+	 * @return boolean
+	 */
+	public function shouldLoadOnRequest(RequestContext $request)
+	{
+		return $request->isAdmin();
 	}
 
 }

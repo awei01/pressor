@@ -74,6 +74,27 @@ class UpdateDisablerPluginProviderTest extends TestCase {
 		$this->app[__NAMESPACE__ . '\UpdateDisabler'];
 	}
 
+// shouldLoadOnRequest
+	function test_shouldLoadOnRequest_RequestContext_CallsIsAdminOnRequestContextWithNoArgs()
+	{
+		$provider = $this->makeProvider();
+		$mockRequest = $this->fakePressorRequest();
+
+		$mockRequest->shouldReceive('isAdmin')->once()->withNoArgs();
+
+		$provider->shouldLoadOnRequest($mockRequest);
+	}
+	function test_shouldLoadOnRequest_RequestContextWhenIsAdminReturnsResult_ReturnsResult()
+	{
+		$provider = $this->makeProvider();
+		$stubRequest = $this->fakePressorRequest();
+		$stubRequest->shouldReceive('isAdmin')->andReturn('result');
+
+		$result = $provider->shouldLoadOnRequest($stubRequest);
+
+		$this->assertEquals('result', $result);
+	}
+
 /*
 */
 }
