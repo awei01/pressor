@@ -22,7 +22,7 @@ class start_Test extends \PHPUnit_Framework_TestCase {
 
 	protected function requireStart()
 	{
-		require($GLOBALS['paths']['base'] . '/start.php');
+		require __DIR__ . '/../start.php';
 	}
 
 	function test_requireStart_AppMethodNotDefined_ThrowsRuntimeException()
