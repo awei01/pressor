@@ -12,15 +12,30 @@ class Provider implements ProviderContract {
 	}
 
 	/**
-	 * get the wordpress path
+	 * make a path from wordpress installation path without trailing slash
 	 * @param  string $path
 	 * @return string|null
 	 */
-	public function wordpress($path = null)
+	public function make($path = null)
 	{
-		if (!$result = $this->getPathFromContainer()) $result = $this->getPathFromConstant();
-		if ($path) $result .= DIRECTORY_SEPARATOR . $path;
+		if ($result = $this->makeFolderPath() and $path)
+		{
+			$result = realpath($result . DIRECTORY_SEPARATOR . $path);
+		}
+
 		return $result;
+	}
+
+	protected function makeFolderPath()
+	{
+		if (!$folder = $this->getPathFromContainer()) $folder = $this->getPathFromConstant();
+
+		if ($folder and ends_with($folder, DIRECTORY_SEPARATOR))
+		{
+			$folder = substr($folder, 0, -1);
+		}
+
+		return $folder;
 	}
 
 	protected function getPathFromContainer()

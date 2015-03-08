@@ -27,87 +27,107 @@ class ProviderTest extends TestCase {
 
 		$this->assertEquals($container, $result);
 	}
-	function test_wordpress_NoParamsContainerSet_CallsOffsetExistsOnContainerWithPathWordressKey()
+	function test_make_NoParamsContainerSet_CallsOffsetExistsOnContainerWithPathWordressKey()
 	{
 		$provider = new Provider($mockContainer = $this->fakeContainer());
 
 		$mockContainer->shouldReceive('offsetExists')->once()->with('path.wordpress');
 
-		$provider->wordpress();
+		$provider->make();
 	}
-	function test_wordpress_NoParamsContainerSetOffsetExistsOnContainerReturnsTrue_CallsOffsetGetOnContainerWithPathWordpressKey()
+	function test_make_NoParamsContainerSetOffsetExistsOnContainerReturnsTrue_CallsOffsetGetOnContainerWithPathWordpressKey()
 	{
 		$provider = new Provider($mockContainer = $this->fakeContainer());
 		$mockContainer->shouldReceive('offsetExists')->with('path.wordpress')->andReturn(true);
 
 		$mockContainer->shouldReceive('offsetGet')->once()->with('path.wordpress');
 
-		$provider->wordpress();
+		$provider->make();
 	}
-	function test_wordpress_NoParamsContainerSetOffsetExistsOnContainerReturnsTrueAndOffsetGetOnContainerReturnsPath_ReturnsPath()
+	function test_make_NoParamsContainerSetOffsetExistsOnContainerReturnsTrueAndOffsetGetOnContainerReturnsPath_ReturnsPath()
 	{
 		$provider = new Provider($stubContainer = $this->fakeContainer());
 		$stubContainer->shouldReceive('offsetExists')->with('path.wordpress')->andReturn(true);
 		$stubContainer->shouldReceive('offsetGet')->with('path.wordpress')->andReturn('result');
 
-		$result = $provider->wordpress();
+		$result = $provider->make();
 
 		$this->assertEquals('result', $result);
 	}
-	function test_wordpress_SubpathContainerSetOffsetExistsOnContainerReturnsTrueAndOffsetGetOnContainerReturnsPath_ReturnsPathDirectorySeparatorSubpath()
+	function test_make_ValidSubpathContainerSetOffsetExistsOnContainerReturnsTrueAndOffsetGetOnContainerReturnsPath_ReturnsPathDirectorySeparatorSubpath()
 	{
 		$provider = new Provider($stubContainer = $this->fakeContainer());
 		$stubContainer->shouldReceive('offsetExists')->with('path.wordpress')->andReturn(true);
-		$stubContainer->shouldReceive('offsetGet')->with('path.wordpress')->andReturn('result');
+		$stubContainer->shouldReceive('offsetGet')->with('path.wordpress')->andReturn($folder = __DIR__ . DIRECTORY_SEPARATOR . 'stubs');
 
-		$result = $provider->wordpress('subpath');
+		$result = $provider->make($file = 'path-provider-test-stub.php');
 
-		$this->assertEquals('result' . DIRECTORY_SEPARATOR . 'subpath', $result);
+		$this->assertEquals($folder . DIRECTORY_SEPARATOR . $file, $result);
 	}
-	function test_wordpress_NoParamsContainerSetOffsetExistsOnContainerReturnsFalse_CallsDefinedWithABSPATH()
+	function test_make_InvalidSubpathContainerSetOffsetExistsOnContainerReturnsTrueAndOffsetGetOnContainerReturnsPath_ReturnsFalse()
+	{
+		$provider = new Provider($stubContainer = $this->fakeContainer());
+		$stubContainer->shouldReceive('offsetExists')->with('path.wordpress')->andReturn(true);
+		$stubContainer->shouldReceive('offsetGet')->with('path.wordpress')->andReturn($folder = __DIR__ . '/stubs');
+
+		$result = $provider->make('invalid');
+
+		$this->assertFalse($result);
+	}
+	function test_make_NoParamsContainerSetOffsetExistsOnContainerReturnsFalse_CallsDefinedWithABSPATH()
 	{
 		$provider = new Provider($stubContainer = $this->fakeContainer());
 		$stubContainer->shouldReceive('offsetExists')->with('path.wordpress')->andReturn(false);
 
-		$provider->wordpress();
+		$provider->make();
 
 		$this->assertFunctionLastCalledWith('defined', array('ABSPATH'));
 	}
-	function test_wordpress_NoParamsWhenContainerNotSet_CallsDefinedWithABSPATH()
+	function test_make_NoParamsWhenContainerNotSet_CallsDefinedWithABSPATH()
 	{
 		$provider = new Provider();
 
-		$provider->wordpress();
+		$provider->make();
 
 		$this->assertFunctionLastCalledWith('defined', array('ABSPATH'));
 	}
-	function test_wordpress_NoParamsWhenContainerNotSetAndDefinedReturnsFalse_ReturnsNull()
+	function test_make_NoParamsWhenContainerNotSetAndDefinedReturnsFalse_ReturnsNull()
 	{
 		$provider = new Provider();
 		$this->spy['defined'] = false;
 
-		$result = $provider->wordpress();
+		$result = $provider->make();
 
 		$this->assertNull($result);
 	}
-	function test_wordpress_NoParamsWhenContainerNotSetAndDefinedReturnsTrue_CallsConstantWithABSPATH()
+	function test_make_NoParamsWhenContainerNotSetAndDefinedReturnsTrue_CallsConstantWithABSPATH()
 	{
 		$provider = new Provider();
 		$this->spy['defined'] = false;
 
-		$provider->wordpress();
+		$provider->make();
 
 		$this->assertFunctionLastCalledWith('constant', array('ABSPATH'));
 	}
-	function test_wordpress_NoParamsWhenContainerNotSetAndDefinedReturnsTrueAndConstantReturnsResult_ReturnsResult()
+	function test_make_NoParamsWhenContainerNotSetAndDefinedReturnsTrueAndConstantReturnsResult_ReturnsResult()
 	{
 		$provider = new Provider();
 		$this->spy['defined'] = false;
 		$this->spy['constant'] = 'result';
 
-		$result = $provider->wordpress();
+		$result = $provider->make();
 
 		$this->assertEquals('result', $result);
+	}
+	function test_make_ValidPathWhenContainerNotSetAndDefinedReturnsTrueAndConstantReturnsPathWithTrailingSlash_PathSlashSubpath()
+	{
+		$provider = new Provider();
+		$this->spy['defined'] = false;
+		$this->spy['constant'] = $folder = __DIR__ . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR;
+
+		$result = $provider->make($file = 'path-provider-test-stub.php');
+
+		$this->assertEquals($folder . $file, $result);
 	}
 
 /*

@@ -39,7 +39,7 @@ class start_Test extends \PHPUnit_Framework_TestCase {
 			$GLOBALS['app'] = new Container;
 		}
 		$this->app = $GLOBALS['app'];
-		$this->app['pressor'] = $pressor = $this->mock('Pressor\Framework\Pressor');
+		$this->app['pressor'] = $pressor = $this->mock('Pressor\Contracts\Framework\Pressor');
 		$pressor->shouldReceive('boot')->byDefault();
 
 		if (!function_exists('app'))

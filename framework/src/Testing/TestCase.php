@@ -30,7 +30,7 @@ abstract class TestCase extends BaseTestCase {
 	 */
 	public function createApplication()
 	{
-		Facade::setFacadeApplication($app = new Application());
+		$app = new Application();
 		$app['env'] = 'testing';
 		$app['path'] = 'app_path';
 		$app['path.config'] = 'config_path';

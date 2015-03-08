@@ -3,10 +3,10 @@
 interface Provider {
 
 	/**
-	 * get the wordpress path
+	 * make a path from wordpress installation path
 	 * @param  string $path
 	 * @return string|null
 	 */
-	public function wordpress($path = null);
+	public function make($path = null);
 
 }
