@@ -29,12 +29,13 @@ trait HasPathProviderTrait {
 	 }
 
 	/**
-	 * get the wordpress path from the path provider
+	 * make the wordpress path from the path provider
+	 * @param  string $path
 	 * @return null|string
 	 */
-	 public function getWordpressPath()
+	 public function makeWordpressPath($path = null)
 	 {
- 		return $this->pathProvider->wordpress();
+ 		return $this->pathProvider->make($path);
 	 }
 
 }

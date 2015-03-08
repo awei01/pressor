@@ -27,14 +27,14 @@ class ProxyTest extends TestCase {
 	protected function makeProxy()
 	{
 		$fakePathProvider = $this->fakePressorPath();
-		$fakePathProvider->shouldReceive('wordpress')->byDefault()->andReturn(__DIR__ . '/stubs');
+		$fakePathProvider->shouldReceive('make')->byDefault()->andReturn(__DIR__ . '/stubs');
 		return new Proxy($fakePathProvider);
 	}
-	function test_callWordpressFunction_WordpressMethodAndArgs_CallsGetContainerOnPressorWithNoArgs()
+	function test_callWordpressFunction_WordpressMethodAndArgs_CallsGetContainerOnPressorWithNull()
 	{
 		$proxy = $this->makeProxy();
 
-		$proxy->getPathProvider()->shouldReceive('wordpress')->once()->withNoArgs()->andReturn(__DIR__ . '/stubs');
+		$proxy->getPathProvider()->shouldReceive('make')->once()->with(null)->andReturn(__DIR__ . '/stubs');
 
 		$proxy->callWordpressFunction('doWordpressFunction', array('param1', 'param2'));
 	}
@@ -99,7 +99,7 @@ class ProxyTest extends TestCase {
 	{
 		$proxy = $this->makeProxy();
 
-		$proxy->getPathProvider()->shouldReceive('wordpress')->once()->withNoArgs()->andReturn(__DIR__ . '/stubs');
+		$proxy->getPathProvider()->shouldReceive('make')->once()->with(null)->andReturn(__DIR__ . '/stubs');
 
 		$proxy->callWordpressFunction('doWordpressFunction', array('param1', 'param2'));
 		$proxy->callWordpressFunction('doWordpressFunction', array('param1', 'param2'));

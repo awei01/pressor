@@ -59,7 +59,7 @@ class Proxy implements ProxyContract {
 		{
 			throw $this->makeBadFunctionCallException('Cannot proxy native PHP function [' . $method . ']');
 		}
-		if (strpos($path, $this->getWordpressPath()) === false)
+		if (strpos($path, $this->makeWordpressPath()) === false)
 		{
 			throw $this->makeBadFunctionCallException('Cannot proxy function [' . $method . '] defined outside of Wordpress');
 		}
